@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+
+  <!-- Place favicon.ico in the root directory -->
+</head>
+
+<body>
+  <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+  <!-- Add your site or application content here -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1>Snow Pi</h1>
+      <p>Hello world! Welcome to my internet thing!</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <!-- <div class="col-md-4">
+        <h3>Switch: <span id='switch_value'></span></h3>
+      </div> -->
+      <div class="col-md-12">
+        <h3>Chart:</h3>
+        <canvas id="myChart" width="1000" height="400"> </canvas>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div>
+      <p> Enter # of sample to be retrieved: {{ rangeTime }}
+        <form id="target" method="POST">
+          <input name="rangeTime" value={{rangeTime}}>
+          <input type="submit">
+        </form>
+        <iframe id="rfFrame" name="rfFrame" src="about:blank" style="display:none;"></iframe>
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h3>History Chart:</h3>
+        <canvas id="histChart" width="1000" height="400"> </canvas>
+      </div>
+      <!-- <p>histDate:{{hist_date}} </p>
+      <p>histDate:{{hist_dist}} </p> -->
+
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/Chart.min.js')}}"></script>
+  <script>
+    $(document).ready(function () {
+      //Plot chart
+      var ctx = document.getElementById('myChart').getContext('2d');
+
+      //show history when click
+      // $('#target').click(function () {
+      //   //alert("Handler for .submit() called.");
+      //   // histDate = ['1','2','3','1','2','3','1','2','3','1'];
+      //   // histDist = [3, 2, 3, 2, 2, 2, 3, 3, 3, 2];
+      //   //console.log(histDate[0]);
+      //   //histDate = '{{hist_date}}';
+      //   // histDate = ['1', '2', '3'];
+      //   //console.log("histData: " + histDate)
+      //   //histDist = '{{hist_dist}}';
+      //   // histDist = [2, 3, 1];
+      //   histData(histChart, ['1', '2', '3', '1', '2', '3', '1', '2', '3', '1'], [3, 2, 3, 2, 2, 2, 3, 3, 3, 2]);
+
+      //   // histData(histChart, '{{hist_date}}', '{{hist_dist}}');
+      //   return false
+      // });
+
+      //function to add data to chart
+      function addData(chart, label, data) {
+        // console.log(label)
+        // console.log(data)
+        chart.data.labels.push(label);
+        chart.data.datasets.forEach((dataset) => {
+          dataset.data.push(data);
+        });
+        chart.update();
+      }
+      //function to throw old data
+      function removeData(chart) {
+        chart.data.labels.splice(0, 1);
+        chart.data.datasets.forEach((dataset) => {
+          dataset.data.splice(0, 1);
+        });
+        chart.update();
+      }
+
+
+      var count = 0;
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Distance',
+            data: [],
+            backgroundColor: [
+              //   'rgba(255, 99, 132, 0.2)',
+              //   'rgba(54, 162, 235, 0.2)',
+              //   'rgba(255, 206, 86, 0.2)',
+              //   'rgba(75, 192, 192, 0.2)',
+              //   'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            // borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                max: 0.6
+              }
+            }]
+          }
+        }
+
+      });
+
+
+
+      // Function to update the switch state on the page.
+      // Note: Use .switch and int 0/1 instead of because switchState is in JSON format
+      function updateThing(thingState) {
+        if (thingState.switch === 0) {
+          $('#switch_value').text('Off');
+        }
+        else if (thingState.switch === 1) {
+          $('#switch_value').text('On');
+        }
+        // console.log("dist" + thingState.echo);
+        addData(myChart,
+          new Date().toLocaleTimeString(),
+          [thingState.echo]);
+
+        count += 1
+        // console.log(count);
+
+        if (count > 10) {
+          removeData(myChart)
+          count -= 1
+        }
+      }
+
+      // Setup switch server sent event receiver.
+      var thingSource = new EventSource("{{ url_for('thing') }}");
+
+      thingSource.onmessage = function (e) {
+        // console.log(e.data);
+        updateThing($.parseJSON(e.data));  //Parse JSON data
+      }
+      // Set the switch based on the value passed to this template.
+      updateThing('{{ thing }}');
+
+
+
+
+
+
+      console.log("hist_date:", '{{ hist_date }}')
+      var hist_date = '{{hist_date}}'.split(",")
+      var hist_ctx = document.getElementById('histChart').getContext('2d');
+      var histChart = new Chart(hist_ctx, {
+        type: 'line',
+        data: {
+          // labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+          //   '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+          //   '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+          labels: hist_date.map(x => x.slice(11, 26)),
+          datasets: [{
+            label: 'Distance',
+            data: '{{hist_dist}}'.slice(1, -1).split(","),
+            backgroundColor: [
+              'rgba(0, 259, 64, 0.2)'
+            ],
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                max: 0.6
+              }
+            }]
+          }
+        }
+
+      });
+
+    });
+  </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+
+<html class="gr__people_ece_cornell_edu"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Snow Pi</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+   
+    <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+  
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./other1.css">
+    <link href="./other2.css" rel="stylesheet">
+  </head>
+  <body data-gr-c-s-loaded="true">
+
+    <!-- Header -->
+      <section id="header">
+        <header>
+          <span class="image avatar">
+            <!-- <a href="http://people.ece.cornell.edu/land/courses/ece4760" class="image" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"> -->
+            <img src="./cornell_seal_simple_white.svg" alt=""></a></span>
+          <h1 id="logo"><a href="#zero" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">ECE 5725: Embedded Operating Systems</a></h1>
+          <br>
+          <p>Final Design Project for Fall 2019<br>Demo : 5th Dec 2019 </p>
+          <!-- <p>Final Design Project for Fall 2019</p>
+          <p> Demo : 5th Dec 2019 </p> -->
+
+        </header>
+        <nav id="nav">
+          <ul>
+            <li><a href="#one" class="" id="one-link" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Objective</a></li>
+            <li><a href="#two" id="two-link" class="" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Introduction</a></li>
+            <li><a href="#three" id="three-link" class="" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Design</a></li>
+            <li><a href="#four" id="four-link" class="" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Testing</a></li>
+            <li><a href="#five" id="five-link" class="" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Results</a></li>
+            <li><a href="#six" id="six-link" class="" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Conclusion</a></li>
+            <li><a href="#seven" id="six-link" class="" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Future Work</a></li>
+            <li><a href="#eight" id="seven-link" class="" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Appendix</a></li>
+          </ul>
+        </nav>
+      </section>
+
+    <!-- Wrapper -->
+      <div id="wrapper">
+
+        <!-- Main -->
+          <div id="main">
+
+            <!-- Title -->
+              <section id="zero">
+                <div class="container">
+                  <header class="major">
+                    <h2 id="snowpi">Snow Pi</h2>
+                    <p>Zixiao Wang(zw579) and Yue Zhang(yz2455)</p>
+                  </header>
+                </div>
+              </section>
+
+             
+
+            <!-- Introduction -->
+              <section id="one">
+                <div class="container">
+                  <h2>Project Demo</h2>
+                  <div style="text-align:center;">
+
+                  <iframe width="560" height="315" src="https://youtu.be/9Rp8hJeo5Vk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+
+                  <h2>Objective</h2>
+                  <p>The winter of Ithaca is coming with lots of snow. We’ve heard of its reputation and we want to know how bad it can really be. Therefore, we want to introduce a system, SnowPi, that allows us to know real-time snow accumulation depth and be able to alert people when the depth is getting dangerous. The system displays real-time snow depth chart dynamically and store history depth data in its local database for user to retrieve. For better user interaction, the system has a front-end web page for data visualization. Once the detected snow depth is above the set threshold, an alerting email will be sent to registered user. </p>
+                </div>
+              </section>
+
+            <!-- High Level Design -->
+              <section id="two">
+                <div class="container">
+                  <h2>Introduction</h2>
+
+                  <p>Building SnowPi system includes both front-end and back-end design. The system comprises the following features:
+                     <ul>
+                    <li> Raspberry Pi as Flask Server</li>
+                    <li> Automatic distance data collection</li>
+                    <li> Local database inserting and retrieving</li>
+                    <li> Dynamic data visualization on web page</li>
+                    <!-- <li> IR LED support to control devices with IR receivers.</li> -->
+                  </ul>
+                  </p>
+
+                  <p>The system also consists of several peripherals to:
+                      <li> Ultrasonic sensor </li>
+                      <li>  Wooden stand with set height </li>
+                      <li> Sound System </li>
+                  </p>  
+                      Raspberry Pi is located at a default height on the wooden stand. Pi would subtract the real-time distance, which is collected from ultrasonic sensor, from the default stand height to get the real snow depth covering the ground. Then depth data would be pushed to web front end every 2 seconds and display dynamically as a chart. At the same time, data would also be stored in Sqlite3 with unique data ID, local time and sensor information for latter retrieving.
+                  </div>
+              </section>
+
+            <!-- Hardware Design -->
+              <section id="three">
+                <div class="container">
+                  <h2>Design</h2>
+                  <p>The picture below indicates how system is structured and how data flows in the system.</p>
+                  <img class="center" id="flow" src="./flow.png" alt="" width="500"> 
+                  <style>
+                  #flow{
+                    display: block;
+                    transform:rotate(0deg);
+                    margin-left: auto;
+                    margin-right: auto;
+                  } 
+                  </style>
+                  <br>
+                  <br>
+                  <h2>Hardware Design</h2>
+                  <h4>Ultrasonic Sensor Circuit </h4>
+                  <br>
+                  <img class="center" id="sensor2" src="./sensor2.jpeg" alt="" width="500"> 
+                  <style>
+                  #sensor2{
+                    display: block;
+                    transform:rotate(0deg);
+                    margin-left: auto;
+                    margin-right: auto;
+                  } 
+                  </style>
+                  <br>
+                  <br>
+                  <img class="center" id="sensor" src="./sensor.jpeg" alt="" width="500"> 
+                  <style>
+                  #sensor{
+                    display: block;
+                    transform:rotate(0deg);
+                    margin-left: auto;
+                    margin-right: auto;
+                  } 
+                  </style>
+                  <br>
+                  <p>We use RCWL-1601 ultrasonic sensor as distance detector. It has four wires connected to Raspberry Pi, which are VCC, Ground, Trig and Echo. Raspberry Pi triggers the sensor to start sending ultrasonic burst by sending a pulse of 1 nanosecond to the Trig pin. Then Raspberry Pi starts to collect data sent back from Echo pin. Note a 500 Ohm resistor is needed to protect the GPIO pin because the voltage of Echo pin is around 5V.
+                 </p>
+
+                   
+                   <h4>Stand with defualt height</h4>
+                   <br>
+                   <img class="center" id="wooden" src="./wooden.jpeg" alt="" width="500"> 
+                   <style>
+                   #wooden{
+                     display: block;
+                     transform:rotate(0deg);
+                     margin-left: auto;
+                     margin-right: auto;
+                   } 
+                   </style>
+                   <br>
+                   <p>This picture shows our testing outdoor. Raspberry Pi was located on the top the stand and ultrasonic sensor is facing down to the ground.
+                    </p>
+                   
+                 
+                   
+
+                      <h2>Software Design</h2>
+                      <h4>Flask Server </h4>
+                      <p>Flask is a lightweight WSGI web application framework running on Python. We use Flask to set up backend server on Raspberry Pi. The Flask server is responsible for passing the data collected from the sensor to front-end web page. It also helps coordinate the inserting and retrieving history data.</p>
+          <h4>Sqlite3 Database</h4>
+          
+          <p>Database is introduced in our project for storing and retrieving history data. Everytime distance data is updated, it will be inserted in database with its unique data ID, local time and data value. When user sends the command to retrieve latest N points of history data, our database will return N most recently inserted points in chronical order.
+            </p>
+                   <img class="center" id="database" src="./database.jpeg" alt="" width="500"> 
+                   <style>
+                   #database{
+                     display: block;
+                     transform:rotate(0deg);
+                     margin-left: auto;
+                     margin-right: auto;
+                   } 
+                   </style>
+                   <br>
+            <h4>Chart.js Library
+              </h4>
+              <p>We use chart.js library to visualize our current data and history data dynamically. Everytime the sensor collects new data, a server sent event will trigger the front-end page to refresh automatically and push new data to the chart.</p>
+         <h4>SendGrid SMTP</h4>
+         <p>Our system keeps an eye on the dangerous snow depth. Once the detected depth is greater than 30cm, system will send an alerting email to a specified email address. Email is sent by SendGrid SMTP(Simple Mail Tranfer Protocol). A argument representing dangerous depth is sent thourgh FIFO to another python script to send the email.</p>
+ 
+                </div>
+              </section>
+
+            <!-- Testing -->
+              <section id="four">
+                <div class="container">
+                  <h2>Testing</h2>
+                  <p>Our test focused on the detection of ultrasonic sensor, real-time snow depth visualization, history data visualization and alert email receiving.</p>
+                  <h4>Detection of ultrasonic sensor</h4>
+                     <div class="row">
+                      <div class="col-md-7">
+                          <p>Following is our wooden base, which is constructed for stablization, snow would be accumulating on the base, the ultrasonic sensor on top will detect the distance to snow surface. We record the original height and get the real-time distance when snow adding up.</p>
+                        </p>
+                      </div>
+                      <div class="col-md-5">
+                          <img id="frame" src="./framework.jpeg" alt="" width="300"> 
+                          <style>
+                          #frame{
+                            transform:rotate(0deg);
+                          } 
+                          </style>
+                      </div>
+                  </div>
+                  <br>
+                   <h4>Real-time Snow Depth Visualization</h4>
+                   <p>We use our raspberry pi as a server, and our laptop connected to the same wifi as raspberry pi.
+                     When we connect the raspberry pi server, we could load the web page. Originally, our snow depth
+                    is zero, as we adding snow on the base the depth continuously increasing. The real-time depth 
+                    will be visualized in the chart, the y axis of our chart is the snow depth. We update the dynamic chart 
+                  every 2 seconds. </p>
+            
+                  <img class="center" id="chart1" src="./chart1.jpeg" alt="" width="700"> 
+                  <style>
+                  #chart1{
+                    display: block;
+                    transform:rotate(0deg);
+                    margin-left: auto;
+                    margin-right: auto;
+                  } 
+                  </style>
+                  <br>
+
+                  <h4>History Data Visualization</h4>
+                   <p> As we type in the number of history points, the respberry pi will 
+                     retrieve data from our database, and visualize the history points in the history chart.
+                     In the following example, we want the past 5 depth information.
+                   </p>
+                  <br>
+                  <img class="center" id="chart2" src="./chart2.jpeg" alt="" width="700"> 
+                  <style>
+                  #chart2{
+                    display: block;
+                    transform:rotate(0deg);
+                    margin-left: auto;
+                    margin-right: auto;
+                  } 
+                  </style>
+                  <br>
+
+                  <h4>Sending Alert Email</h4>
+                  <div class="row">
+                    <div class="col-md-8">
+                   <p> We set a resonable threshold as 0.3, which means that when snow depth is above 0.3m, 
+                     our raspberry pi will send an alert email to user.
+                   </p>
+                   </div>
+                  <br>
+                  <div class="col-md-4">
+                  <img class="center" id="alert" src="./alert.png" alt="" width="200"> 
+                  <style>
+                  #alert{
+                    display: block;
+                    transform:rotate(0deg);
+                    margin-left: auto;
+                    margin-right: auto;
+                  } 
+                  </style>
+                  </div>
+                  </div>
+                  <br>
+
+                 
+                 
+
+                </div>
+              </section>
+
+            <!-- Results -->
+              <section id="five">
+                <div class="container">
+                  <h2>Results</h2>
+
+                  <p>Overall, our project result fairly reached our expectation.</p>
+                
+                    <h4>Hardware</h4>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <p>For the hardware, we successfully get distance from ultrasonic sensor and send real-time data to raspberry pi.
+                          </p>
+                        </div>
+                    </div>
+                 
+                
+                 
+                    <h4>Front-end && Back-end </h4>
+                    <p>For the whole project, we used python and flask library to connect front-end and back-end. The real-time snow depth will be caught by html and visualized on the webpage. We will update the dynamic chart every 10 seconds. Users can  type in the number of history points they want to know, after they sent request, the rapberry pi will retrieve history data from our database and display these points on our history chart in the webpage.</p>
+
+                </div>
+              </section>
+
+            <!-- Conclusion -->
+              <section id="six">
+                <div class="container">
+                  <h2>Conclusion</h2>
+                  <p>Thanks to this final project, we learnt a lot from it. In a nutshell, we built a Snow Depth Visualizer on webpage which could tell you the real-time snow depth outside. Firstly, for our framework we had an ultrasonic sensor on top of the base wood, which detect the distance to snow surface. The ultrasonic sensor will send the real-time distance to our raspberry pi, and the raspberry pi calculates the snow depth by subtracting the received distance from the base height. Secondly, we use the raspberry pi as a server, when we are connecting to the same local internet as raspberry pi, we could connect to the server and come into the web page. To design the dynamic front-end webpage and database, we used python and flask library. To send alert email when snow depth is above the threshold, we implemented it with sendgrid. To visualize and retrieve the history data, we conducted tables with sqlite, which is a small, fast, full-featured SQL database engine.</p>
+
+
+                  <!--   <img src="./smart_remote_files/univ_control.jpg" alt="" width="150" height="170">
+                    <img src="./smart_remote_files/plus.png" alt="" width="80" height="170">
+                    <img src="./smart_remote_files/brain.jpg" alt="" width="150" height="170">
+                    <img src="./smart_remote_files/equal_to.jpg" alt="" width="80" height="170">
+                    <img src="./smart_remote_files/smart_remote.jpg" alt="" width="300" height="170" rotate="180">
+`
+
+                  </p> -->
+
+
+                </div>
+              </section>
+
+        <section id="seven">
+                <div class="container">
+                  <h2>Future Work</h2>
+                  
+                    <ul>
+          <li>We can use multiple sensors to detect the distances in a region instead of just one, because the surface of snow is not flatten, we can calculate the average depth with multiple sensors.</li>
+          <li>Add DHT11 temperature sensor to our project, because the sound speed will be influenced by temperature and will not always be 340 metres per second. The distance got by our ultrasonic sensor depends on real-time temperature, so we could add temperature sonsor to validate. </li>
+         <!--  <li>We can also build and architecture of multiple remotes and multiple devices which allows multiple remotes to control the same device. We could also add a security feature to restrict control to a device for a specfic set of remotes, which could be controlled by the device system administrator. </li>
+          <li>We presently have just three common devices. Future work could be involved to add all the IOT devices to control. </li>
+          <li>Present control just uses two protocols, bluetooth and IR for communication and control. We can add more prootocols like NFC, RFID, WiFi, etc to cover wide range of devices.</li> -->
+                   
+                  </ul>
+
+
+                </div>
+              </section>
+
+
+
+            <!-- Appendix -->
+              <section id="eight">
+                <div class="container">
+                  <h3>Budget</h3>
+                 <br>
+                  <div class="table-wrapper">
+                      <table class="alt">append
+                        <thead>
+                          <tr>
+                            <th>Vendor</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit Cost($)</th>
+                            <th>Total Cost($)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>ECE Department</td>
+                            <td>Raspberry Pi 3B</td>
+                            <td>1</td>
+                            <td>35.00</td>
+                            <td>35.00</td>
+                          </tr>
+                          <tr>
+                            <td>ECE Department</td>
+                            <td>RCWL-1601 Ultrasonic sensor</td>
+                            <td>1</td>
+                            <td>6.00</td>
+                            <td>6.00</td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="3"></td>
+                            <td>Total</td>
+                            <td>41</td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                 
+                  <h3>References</h3>
+                
+                      <ul>
+
+                        <li><a href="https://medium.com/mjrobot-org/python-webserver-with-flask-and-raspberry-pi-82219e7a0616">Python WebServer With Flask and Raspberry Pi</a></li>
+                        <li><a href="https://medium.com/@rovai/from-data-to-graph-a-web-jorney-with-flask-and-sqlite-6c2ec9c0ad0">From Data to Graph: a Web Jorney With Flask and SQLite
+                        </a></li>
+                        <li><a href="https://www.youtube.com/watch?v=L55QYFnnrgo&t=2s">Youtube Video</a></li>
+                      </ul>
+                    
+                  
+                  <h3>Work Distribution</h3>
+                  <p>For our snow pi project, we implemented it together. For the weekly report and the final report, 
+                  we split parts and worked on different sections. Zixiao worked on the Objective, Introduction, Design parts, and Yue 
+                  worked on the Test, Conclusion and Results part. 
+                  </p>
+                  <br>
+                  <h3>Code Appendix</h3>
+                   
+                      <ul>
+
+                        <li><a href="https://github.com/zixiao1511034/SnowPi">Github Repo</a></li>
+                        <li><a href="./main.py">Main file</a></li>
+                        <li><a href="./thing.py">Supporting file</a></li>
+                        <li><a href="./newindex.html">Front-end file</a></li>
+                        <li><a href="./send3.py">Email-Alerting file</a></li>
+                      </ul>
+                     
+                  
+                  
+
+                 
+
+                </div>
+              </section>
+
+
+        <!-- Footer -->
+          <section id="footer"><a href="http://skovira.ece.cornell.edu/ece5725/">
+            </a><div class="container"><a href="http://skovira.ece.cornell.edu/ece5725/">
+              </a><a href="http://skovira.ece.cornell.edu/ece5725/">
+                © All rights reserved. </a><a href="http://skovira.ece.cornell.edu/ece5725/">Design: </a><a href="http://html5up.net/">HTML5 UP</a>
+              
+            </div>
+          </section>
+
+   
+
+    <!-- Scripts -->
+      <script src="./jquery.min.js"></script>
+      <script src="./jquery.scrollzer.min.js"></script>
+      <script src="./jquery.scrolly.min.js"></script>
+      <script src="./skel.min.js"></script>
+      <script src="./util.js"></script>
+      <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+      <script src="./main.js"></script>
+      <script src="./prism.js"></script>
+
+  
+
+<div id="titleBar"><a href="#header" class="toggle"></a><span class="title"><a href="#zero">ECE 5725: Embedded Operating Systems</a></span></div><span style="border-radius: 3px !important; text-indent: 20px !important; width: auto !important; padding: 0px 4px 0px 0px !important; text-align: center !important; font: bold 11px/20px &quot;Helvetica Neue&quot;, Helvetica, sans-serif !important; color: rgb(255, 255, 255) !important; background: url(&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMzBweCIgd2lkdGg9IjMwcHgiIHZpZXdCb3g9Ii0xIC0xIDMxIDMxIj48Zz48cGF0aCBkPSJNMjkuNDQ5LDE0LjY2MiBDMjkuNDQ5LDIyLjcyMiAyMi44NjgsMjkuMjU2IDE0Ljc1LDI5LjI1NiBDNi42MzIsMjkuMjU2IDAuMDUxLDIyLjcyMiAwLjA1MSwxNC42NjIgQzAuMDUxLDYuNjAxIDYuNjMyLDAuMDY3IDE0Ljc1LDAuMDY3IEMyMi44NjgsMC4wNjcgMjkuNDQ5LDYuNjAxIDI5LjQ0OSwxNC42NjIiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxIj48L3BhdGg+PHBhdGggZD0iTTE0LjczMywxLjY4NiBDNy41MTYsMS42ODYgMS42NjUsNy40OTUgMS42NjUsMTQuNjYyIEMxLjY2NSwyMC4xNTkgNS4xMDksMjQuODU0IDkuOTcsMjYuNzQ0IEM5Ljg1NiwyNS43MTggOS43NTMsMjQuMTQzIDEwLjAxNiwyMy4wMjIgQzEwLjI1MywyMi4wMSAxMS41NDgsMTYuNTcyIDExLjU0OCwxNi41NzIgQzExLjU0OCwxNi41NzIgMTEuMTU3LDE1Ljc5NSAxMS4xNTcsMTQuNjQ2IEMxMS4xNTcsMTIuODQyIDEyLjIxMSwxMS40OTUgMTMuNTIyLDExLjQ5NSBDMTQuNjM3LDExLjQ5NSAxNS4xNzUsMTIuMzI2IDE1LjE3NSwxMy4zMjMgQzE1LjE3NSwxNC40MzYgMTQuNDYyLDE2LjEgMTQuMDkzLDE3LjY0MyBDMTMuNzg1LDE4LjkzNSAxNC43NDUsMTkuOTg4IDE2LjAyOCwxOS45ODggQzE4LjM1MSwxOS45ODggMjAuMTM2LDE3LjU1NiAyMC4xMzYsMTQuMDQ2IEMyMC4xMzYsMTAuOTM5IDE3Ljg4OCw4Ljc2NyAxNC42NzgsOC43NjcgQzEwLjk1OSw4Ljc2NyA4Ljc3NywxMS41MzYgOC43NzcsMTQuMzk4IEM4Ljc3NywxNS41MTMgOS4yMSwxNi43MDkgOS43NDksMTcuMzU5IEM5Ljg1NiwxNy40ODggOS44NzIsMTcuNiA5Ljg0LDE3LjczMSBDOS43NDEsMTguMTQxIDkuNTIsMTkuMDIzIDkuNDc3LDE5LjIwMyBDOS40MiwxOS40NCA5LjI4OCwxOS40OTEgOS4wNCwxOS4zNzYgQzcuNDA4LDE4LjYyMiA2LjM4NywxNi4yNTIgNi4zODcsMTQuMzQ5IEM2LjM4NywxMC4yNTYgOS4zODMsNi40OTcgMTUuMDIyLDYuNDk3IEMxOS41NTUsNi40OTcgMjMuMDc4LDkuNzA1IDIzLjA3OCwxMy45OTEgQzIzLjA3OCwxOC40NjMgMjAuMjM5LDIyLjA2MiAxNi4yOTcsMjIuMDYyIEMxNC45NzMsMjIuMDYyIDEzLjcyOCwyMS4zNzkgMTMuMzAyLDIwLjU3MiBDMTMuMzAyLDIwLjU3MiAxMi42NDcsMjMuMDUgMTIuNDg4LDIzLjY1NyBDMTIuMTkzLDI0Ljc4NCAxMS4zOTYsMjYuMTk2IDEwLjg2MywyNy4wNTggQzEyLjA4NiwyNy40MzQgMTMuMzg2LDI3LjYzNyAxNC43MzMsMjcuNjM3IEMyMS45NSwyNy42MzcgMjcuODAxLDIxLjgyOCAyNy44MDEsMTQuNjYyIEMyNy44MDEsNy40OTUgMjEuOTUsMS42ODYgMTQuNzMzLDEuNjg2IiBmaWxsPSIjYmQwODFjIj48L3BhdGg+PC9nPjwvc3ZnPg==&quot;) 3px 50% / 14px 14px no-repeat rgb(189, 8, 28) !important; position: absolute !important; opacity: 1 !important; z-index: 8675309 !important; display: none; cursor: pointer !important; border: none !important; -webkit-font-smoothing: antialiased !important; top: 9319px; left: 158px;">Save</span><span style="border-radius: 12px; width: 24px !important; height: 24px !important; background: url(&quot;data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pjxzdmcgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxkZWZzPjxtYXNrIGlkPSJtIj48cmVjdCBmaWxsPSIjZmZmIiB4PSIwIiB5PSIwIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHJ4PSI2IiByeT0iNiIvPjxyZWN0IGZpbGw9IiMwMDAiIHg9IjUiIHk9IjUiIHdpZHRoPSIxNCIgaGVpZ2h0PSIxNCIgcng9IjEiIHJ5PSIxIi8+PHJlY3QgZmlsbD0iIzAwMCIgeD0iMTAiIHk9IjAiIHdpZHRoPSI0IiBoZWlnaHQ9IjI0Ii8+PHJlY3QgZmlsbD0iIzAwMCIgeD0iMCIgeT0iMTAiIHdpZHRoPSIyNCIgaGVpZ2h0PSI0Ii8+PC9tYXNrPjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IiNmZmYiIG1hc2s9InVybCgjbSkiLz48L3N2Zz4=&quot;) 50% 50% / 14px 14px no-repeat rgba(0, 0, 0, 0.4) !important; position: absolute !important; opacity: 1 !important; z-index: 8675309 !important; display: none; cursor: pointer !important; border: none !important; top: 9317px; left: 896px;"></span></div></div></body></html>
